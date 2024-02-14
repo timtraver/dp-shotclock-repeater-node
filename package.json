@@ -1,0 +1,20 @@
+{
+  "name": "dp-shot-clock-repeater-node-only",
+  "version": "0.1.0",
+  "author": "Tim Traver",
+  "description": "Shot Clock Timing Coordinator for DigitalPool (node only)",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.3",
+    "socket.io": "^4.7.4"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "build": "tsc -p . -w"
+  },
+  "qna": "marketplace",
+  "devDependencies": {
+  },
+  "main": "./main.js"
+}

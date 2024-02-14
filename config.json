@@ -1,0 +1,5 @@
+{
+    "repeaterIpAddress": "127.0.0.1",
+    "repeaterPort": "8080",
+    "hasConfigServer": "false"
+}
