@@ -39,8 +39,7 @@ export default class SocketServer {
 
         // Set the events for the server connections
         this.io.on('connection', (socket) => {
-            console.log('Client connected : ', socket.id);
-            if (this.hasConfigServer) this.sendConfigMessage(socket.id + ' - connected');
+            if (this.hasConfigServer) this.sendConfigMessage(socket.id + ' - Connected');
 
             // Listen for pings that are used to determine clock differences
             socket.on('ping', (data, callback) => {
@@ -54,12 +53,9 @@ export default class SocketServer {
                 let type = data.type;
                 let returnData = {};
 
-                console.log(socket.id + 'joining Match ' + data.match + ' as ' + type + ' in ' + roomName);
                 this.sendConfigMessage(socket.id + ' - joining Match ' + data.match + ' as ' + type);
-                console.log("rooms = ", this.rooms);
                 if (this.rooms[roomName] == undefined) {
                     // Room does not yet exist, so lets create it
-                    console.log("Room does not exist, so creating it.");
                     if (type == 'admin') data.admin = socket.id;
                     delete data.type;
                     this.rooms[roomName] = data;
@@ -69,9 +65,7 @@ export default class SocketServer {
                     if (type == 'admin') this.rooms[roomName].admin = socket.id;
                     socket.join(roomName);
                     returnData = this.rooms[roomName];
-                    console.log("Room exists, sending back room data.", returnData);
                 }
-                console.log("this is the return data : ", returnData);
                 callback(
                     returnData
                 );
@@ -81,8 +75,8 @@ export default class SocketServer {
                 let roomName = 'match' + data.match.toString();
                 let room = this.rooms[roomName];
                 this.rooms[roomName] = { ...room, ...data };
-                console.log('update data sent : ', data);
-                console.log('room data : ', this.rooms);
+                // console.log('update data sent : ', data);
+                // console.log('room data : ', this.rooms);
 
                 // Do some calculations for the time diffs and then send an emit to the members in the room
                 this.ensureEmit(socket, roomName, 'update', {
@@ -94,11 +88,10 @@ export default class SocketServer {
                     updateKey: data.updateKey
                 });
                 callback('ok');
-                this.sendConfigMessage(socket.id + ' - Room ' + roomName + ' - Update Message from ' + socket.id);
+                this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Room ' + roomName + ' - Update - Remaining : ' + data.remainingTime + ', Playing : ' + data.isPlaying);
             });
 
             socket.on('disconnect', () => {
-                console.log('Client disconnected : ', socket.id);
                 this.sendConfigMessage(socket.id + ' - Client disconnected');
                 this.cleanRooms(socket);
             });
@@ -106,7 +99,6 @@ export default class SocketServer {
 
         this.io.listen(this.server);
         this.server.listen(this.port, this.address, () => {
-            console.log('Server started and listening at http://' + this.address + ':' + this.port);
             this.sendConfigMessage('Server started and listening at http://' + this.address + ':' + this.port);
         });
     }
@@ -115,11 +107,11 @@ export default class SocketServer {
         console.log("sending emit to room " + roomName);
         socket.timeout(5000).to(roomName).emit(event, arg, (err) => {
             if (err) {
-                console.log("got error", err);
+                this.sendConfigMessage("Got Error : ", err);
                 // no ack from the client, so try and send it again
                 this.ensureEmit(socket, roomName, event, arg);
             } else {
-                console.log('Got callback value, so ok');
+                this.sendConfigMessage('Got callback value, so ok');
             }
         })
     }
@@ -127,7 +119,6 @@ export default class SocketServer {
     stopSocket() {
         // Stop the socket server and clear the variables
         // make all Socket instances disconnect
-        console.log('Stopping existing socket service.');
         this.io.disconnectSockets();
         this.io.close();
         this.sendConfigMessage('Socket server services stopped.');
@@ -154,6 +145,9 @@ export default class SocketServer {
     sendConfigMessage(message) {
         if (this.hasConfigServer) {
             this.configMessages.push(message);
+        } else {
+            let date = new Date;
+            console.log(date.toLocaleDateString() + message);
         }
     }
 }
