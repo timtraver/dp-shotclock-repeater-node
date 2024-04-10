@@ -75,8 +75,6 @@ export default class SocketServer {
                 let roomName = 'match' + data.match.toString();
                 let room = this.rooms[roomName];
                 this.rooms[roomName] = { ...room, ...data };
-                // console.log('update data sent : ', data);
-                // console.log('room data : ', this.rooms);
 
                 // Do some calculations for the time diffs and then send an emit to the members in the room
                 this.ensureEmit(socket, roomName, 'update', {
