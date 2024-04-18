@@ -4,5 +4,5 @@
     "repeaterPort": "8443",
     "hasConfigServer": false,
     "httpsKeyPath": "/etc/letsencrypt/live/domain.com/privkey.pem",
-    "httpsCertPath": "/etc/letsencrypt/live/domain.com/cert.pem"
+    "httpsCertPath": "/etc/letsencrypt/live/domain.com/fullchain.pem"
 }
