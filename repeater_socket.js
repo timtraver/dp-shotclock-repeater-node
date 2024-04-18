@@ -9,29 +9,38 @@
  */
 
 import express from 'express';
-import { createServer } from 'node:http';
+import { createServer } from 'node:https';
 import { Server } from 'socket.io';
-
+import fs from 'fs';
 export default class SocketServer {
+    domain;
     address;
     port;
     hasConfigServer = false;
-    app = express();
-    server = createServer(this.app);
-    io = new Server(this.server, {
-        cors: {
-            origin: "*"
-        }
-    });
-
+    httpsKeyPath;
+    httpsCertPath;
+    app;
+    server;
+    io;
     rooms = [];
     configMessages = [];
 
-    // Constructor to set the ip address and port
-    constructor(address, port, hasConfigServer) {
+    // Constructor to set the domain, ip address, and port and create the express https server
+    constructor(domain, address, port, hasConfigServer, httpsKeyPath, httpsCertPath) {
+        this.domain = domain;
         this.address = address;
         this.port = port;
         this.hasConfigServer = hasConfigServer;
+        this.httpsKeyPath = httpsKeyPath;
+        this.httpsCertPath = httpsCertPath;
+
+        const privateKey = fs.readFileSync(this.httpsKeyPath, 'utf8');
+        const certificate = fs.readFileSync(this.httpsCertPath, 'utf8');
+        const credentials = { key: privateKey, cert: certificate };
+
+        this.app = express();
+        this.server = createServer(credentials, this.app);
+        this.io = new Server(this.server, { cors: { origin: "*" } });
     }
 
     // Method to start the socket services
