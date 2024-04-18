@@ -43,6 +43,10 @@ export default class SocketServer {
         this.io = new Server(this.server, { cors: { origin: "*" } });
     }
 
+    shortenSocketString(string) {
+        return string.substring(string.length - 5);
+    }
+
     // Method to start the socket services
     startSocket() {
 
