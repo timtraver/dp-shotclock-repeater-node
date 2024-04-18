@@ -14,9 +14,9 @@ This is the node application to handle a shot clock repeater web socket.
 
 This application needs an https certificate to use when serving up the websocket so as to work with secure sites making calls to this server. You will need to install letsencrypt on the local server, and use the following command to create a certificate for the domain name that points to this server.
 
-```sudo snap install --classic certbot```
-```sudo ln -s /snap/bin/certbot /usr/bin/certbot```
-```sudo certbot certonly --standalone```
+### ```sudo snap install --classic certbot```
+### ```sudo ln -s /snap/bin/certbot /usr/bin/certbot```
+### ```sudo certbot certonly --standalone```
 
 During the certbot process, you need to enter the fully qualified domain name that will be used for the cert.
 
@@ -24,12 +24,12 @@ During the certbot process, you need to enter the fully qualified domain name th
 
 Use this file to set the coniguration for the node repeater server.
 The parameters are as follows
-    repeaterFQDN : the fully qualified domain name to be used for the created certificate (same as created in the certbot process)
-    repeaterIpAddress : the local IP Address to bind to for the server
-    repeaterPort : the local port to be used (should be 8443 or higher than the reserved ports becuase it is being run by non root user)
-    hasConfigServer : flag to say whether or not it has a configuration server (only really true with electron app version),
-    httpsKeyPath : path to letsencrypt key
-    httpsCertPath : path to letsencrypt cert
+- repeaterFQDN : the fully qualified domain name to be used for the created certificate (same as created in the certbot process)
+- repeaterIpAddress : the local IP Address to bind to for the server
+- repeaterPort : the local port to be used (should be 8443 or higher than the reserved ports becuase it is being run by non root user)
+- hasConfigServer : flag to say whether or not it has a configuration server (only really true with electron app version),
+- httpsKeyPath : path to letsencrypt key
+- httpsCertPath : path to letsencrypt cert
 
 ## Additional local config
 
