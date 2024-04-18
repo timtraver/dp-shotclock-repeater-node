@@ -115,7 +115,7 @@ export default class SocketServer {
     }
 
     ensureEmit(socket, roomName, event, arg) {
-        console.log("sending emit to room " + roomName);
+        this.sendConfigMessage("Sending emit to room " + roomName);
         socket.timeout(5000).to(roomName).emit(event, arg, (err) => {
             if (err) {
                 this.sendConfigMessage("Got Error : ", err);
@@ -152,7 +152,7 @@ export default class SocketServer {
     }
 
     sendConfigMessage(message) {
-        if (this.hasConfigServer) {
+        if (this.hasConfigServer === true) {
             this.configMessages.push(message);
         } else {
             let date = new Date;

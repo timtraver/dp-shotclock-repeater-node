@@ -2,7 +2,7 @@
     "repeaterFQDN": "domain.com",
     "repeaterIpAddress": "127.0.0.1",
     "repeaterPort": "8443",
-    "hasConfigServer": "false",
+    "hasConfigServer": false,
     "httpsKeyPath": "/etc/letsencrypt/live/domain.com/privkey.pem",
     "httpsCertPath": "/etc/letsencrypt/live/domain.com/cert.pem"
 }
