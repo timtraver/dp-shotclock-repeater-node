@@ -156,7 +156,7 @@ export default class SocketServer {
             this.configMessages.push(message);
         } else {
             let date = new Date;
-            console.log(date.toLocaleDateString() + message);
+            console.log(date.toLocaleDateString() + ' - ' + message);
         }
     }
 }
