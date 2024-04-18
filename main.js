@@ -13,9 +13,12 @@ import config from './config.json' assert { type: "json" };
 import SocketServer from './repeater_socket.js';
 
 // Fill in the following for the config for this repeater
+const repeaterFQDN = config.repeaterFQDN;
 const repeaterIpAddress = config.repeaterIpAddress;
 const repeaterPort = config.repeaterPort;
 const hasConfigServer = config.hasConfigServer;
+const httpsKeyPath = config.httpsKeyPath;
+const httpsCertPath = config.httpsCertPath;
 
-let repeater = new SocketServer(repeaterIpAddress, repeaterPort, hasConfigServer);
+let repeater = new SocketServer(repeaterFQDN, repeaterIpAddress, repeaterPort, hasConfigServer, httpsKeyPath, httpsCertPath);
 repeater.startSocket();
