@@ -52,7 +52,7 @@ export default class SocketServer {
 
         // Set the events for the server connections
         this.io.on('connection', (socket) => {
-            if (this.hasConfigServer) this.sendConfigMessage(socket.id + ' - Connected');
+            if (this.hasConfigServer) this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Connected');
 
             // Listen for pings that are used to determine clock differences
             socket.on('ping', (data, callback) => {
@@ -66,7 +66,7 @@ export default class SocketServer {
                 let type = data.type;
                 let returnData = {};
 
-                this.sendConfigMessage(socket.id + ' - joining Match ' + data.match + ' as ' + type);
+                this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - joining Match ' + data.match + ' as ' + type);
                 if (this.rooms[roomName] == undefined) {
                     // Room does not yet exist, so lets create it
                     if (type == 'admin') data.admin = socket.id;
@@ -103,7 +103,7 @@ export default class SocketServer {
             });
 
             socket.on('disconnect', () => {
-                this.sendConfigMessage(socket.id + ' - Client disconnected');
+                this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Client disconnected');
                 this.cleanRooms(socket);
             });
         });
@@ -122,7 +122,7 @@ export default class SocketServer {
                 // no ack from the client, so try and send it again
                 this.ensureEmit(socket, roomName, event, arg);
             } else {
-                this.sendConfigMessage('ok');
+                this.sendConfigMessage('Emit Success');
             }
         })
     }
