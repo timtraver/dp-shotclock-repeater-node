@@ -110,7 +110,7 @@ export default class SocketServer {
 
         this.io.listen(this.server);
         this.server.listen(this.port, this.address, () => {
-            this.sendConfigMessage('Server started and listening at http://' + this.address + ':' + this.port);
+            this.sendConfigMessage('Server started and listening at https://' + this.address + ':' + this.port);
         });
     }
 
