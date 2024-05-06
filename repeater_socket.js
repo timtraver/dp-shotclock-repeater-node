@@ -79,7 +79,8 @@ export default class SocketServer {
                     socket.join(roomName);
                     returnData = this.rooms[roomName];
                 }
-                this.sendConfigMessage('Room ' + roomName + ' (' + this.rooms[roomName].length + ')');
+                const connectionsInRoom = this.io.sockets.adapter.rooms.get(roomName).size;
+                this.sendConfigMessage('Room ' + roomName + ' (' + `${connectionsInRoom}` + ')');
                 callback(
                     returnData
                 );
