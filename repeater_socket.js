@@ -79,6 +79,7 @@ export default class SocketServer {
                     socket.join(roomName);
                     returnData = this.rooms[roomName];
                 }
+                this.sendConfigMessage('Room ' + roomName + ' (' + this.rooms[roomName].length.toString() + ')');
                 callback(
                     returnData
                 );
@@ -149,6 +150,7 @@ export default class SocketServer {
                 }
             }
         }
+        this.sendConfigMessage('Room ' + roomName + ' (' + this.rooms[roomName].length.toString() + ')');
     }
 
     sendConfigMessage(message) {
