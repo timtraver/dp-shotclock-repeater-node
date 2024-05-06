@@ -150,7 +150,6 @@ export default class SocketServer {
                 }
             }
         }
-        this.sendConfigMessage('Room ' + roomName + ' (' + this.rooms[roomName].length + ')');
     }
 
     sendConfigMessage(message) {
