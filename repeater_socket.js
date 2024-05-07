@@ -118,15 +118,25 @@ export default class SocketServer {
 
     ensureEmit(socket, roomName, event, arg) {
         this.sendConfigMessage("Sending emit to room " + roomName);
-        socket.timeout(5000).to(roomName).emit(event, arg, (err) => {
-            if (err) {
-                this.sendConfigMessage("Got Error : ", err);
-                // no ack from the client, so try and send it again
-                this.ensureEmit(socket, roomName, event, arg);
-            } else {
-                this.sendConfigMessage('Emit Success');
-            }
-        })
+        let attempts = 0; // Counter to track the number of attempts
+        let retries = 3; // Number of retries before giving up
+        const emitEvent = () => {
+            attempts++;
+            socket.to(roomName).emit(event, arg, (err) => {
+                if (err) {
+                    if (attempts < retries) {
+                        this.sendConfigMessage("Got Error : ", err);
+                        // no ack from the client, so try and send it again
+                        emitEvent();
+                    } else {
+                        this.sendConfigMessage("Failed to emit to all clients of room " + roomName);
+                    }
+                } else {
+                    this.sendConfigMessage('Emit Success');
+                }
+            })
+        }
+        emitEvent();
     }
 
     stopSocket() {
