@@ -118,27 +118,24 @@ export default class SocketServer {
         });
     }
 
-    ensureEmit(socket, roomName, event, arg) {
+    ensureEmit(socket, roomName, event, arg, attempt = 0) {
         this.sendConfigMessage("Sending emit to room " + roomName);
-        let attempts = 0; // Counter to track the number of attempts
         let retries = 3; // Number of retries before giving up
-        const emitEvent = () => {
-            attempts++;
-            socket.to(roomName).emit(event, arg, (err) => {
+        attempt++;
+        if (attempt < retries) {
+            socket.to(roomName).emit(event, arg, (err, responses) => {
                 if (err) {
-                    if (attempts < retries) {
-                        this.sendConfigMessage("Got Error : ", err);
-                        // no ack from the client, so try and send it again
-                        emitEvent();
-                    } else {
-                        this.sendConfigMessage("Failed to emit to all clients of room " + roomName);
-                    }
+                    this.sendConfigMessage("Got Error : ", err);
+                    // no ack from the client, so try and send it again
+                    this.ensureEmit(socket, roomName, event, arg, attempt);
                 } else {
                     this.sendConfigMessage('Emit Success');
                 }
             });
+        } else {
+            this.sendConfigMessage("Failed to emit to all clients of room " + roomName);
         }
-        emitEvent();
+        return;
     }
 
     stopSocket() {
