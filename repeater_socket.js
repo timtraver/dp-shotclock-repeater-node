@@ -52,7 +52,7 @@ export default class SocketServer {
 
         // Set the events for the server connections
         this.io.on('connection', (socket) => {
-            if (this.hasConfigServer) this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Connected');
+            this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Connected');
 
             // Listen for pings that are used to determine clock differences
             socket.on('ping', (data, callback) => {
@@ -133,7 +133,7 @@ export default class SocketServer {
                 }
             });
         } else {
-            this.sendConfigMessage("Failed to emit to all clients of room " + roomName);
+            this.sendConfigMessage('Failed to send emit to room ' + roomName + ' after ' + retries + ' attempts.');
         }
         return;
     }
