@@ -100,7 +100,9 @@ export default class SocketServer {
                     maxTime: data.maxTime,
                     updateKey: data.updateKey
                 });
-                callback('ok');
+                callback({
+                    status: "ok"
+                });
                 this.sendConfigMessage(this.shortenSocketString(socket.id) + ' - Room ' + roomName + ' - Update - Remaining : ' + data.remainingTime + ', Playing : ' + data.isPlaying);
             });
 
@@ -134,7 +136,7 @@ export default class SocketServer {
                 } else {
                     this.sendConfigMessage('Emit Success');
                 }
-            })
+            });
         }
         emitEvent();
     }
