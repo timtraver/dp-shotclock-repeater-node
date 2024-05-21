@@ -123,7 +123,7 @@ export default class SocketServer {
         let retries = 3; // Number of retries before giving up
         attempt++;
         if (attempt < retries) {
-            socket.timout(2000).to(roomName).emit(event, arg, (err, responses) => {
+            socket.timeout(2000).to(roomName).emit(event, arg, (err, responses) => {
                 if (err) {
                     this.sendConfigMessage("Got Error From Emit: ", err);
                     // no ack from the client, so try and send it again
