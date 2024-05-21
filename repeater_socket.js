@@ -95,7 +95,7 @@ export default class SocketServer {
                 this.ensureEmit(socket, roomName, 'update', {
                     ...data,
                     isPlaying: data.isPlaying,
-                    endTimerTime: data.endTimerTime - data.clockOffset,
+                    endTimerTime: data.endTimerTime + data.clockOffset,
                     remainingTime: data.remainingTime,
                     maxTime: data.maxTime,
                     updateKey: data.updateKey
