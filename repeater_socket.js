@@ -124,6 +124,7 @@ export default class SocketServer {
         attempt++;
         if (attempt < retries) {
             socket.to(roomName).emit(event, arg, (err, responses) => {
+                console.log('response', responses, ' - err', err);
                 if (err) {
                     this.sendConfigMessage("Got Error : ", err);
                     // no ack from the client, so try and send it again
