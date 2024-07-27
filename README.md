@@ -35,15 +35,43 @@ The parameters are as follows
 
 After you have done all of that setup, you need to create a user to run the node server as (shotclock), and change the permissions on all the files to be shotclock:shotclock
 
+### ```useradd -d /home/dp-shotclock-repeater-node shotclock```
+### ```chown -R shotclock:shotclock dp-shotclock-repeater-node```
+
 You will need to create a systemd service to start the node server and run as the user
+
+### `apt install nodejs`
+### `apt install npm`
+### `npm install`
+### `chmod -R 755 /etc/letsencrypt/archive /etc/letsencrypt/live`
+### `cd /lib/systemd/system`
+### `vi shotclock.service`
+
+and put the following into the shotclock.service file
+[Unit]
+Description=Digital Pool Shot Clock Repeater Service
+After=network.target
+
+[Service]
+Type=simple
+User=shotclock
+ExecStart=/usr/bin/node /home/dp-shotclock-repeater-node/main.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+### `systemctl enable shotclock`
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run it manually:
 
 ### `npm start`
 
 Runs the app manually based on the config values in config.json
 
-In the systemd service, the execfiule will be something like /usr/bin/node /path/dp-shotclock-repeater-node/main.js
+Or you can start the service
+
+### `systemctl start shotclock`
 
